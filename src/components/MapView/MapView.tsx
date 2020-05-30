@@ -1,28 +1,28 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState } from 'react';
 // @ts-ignore
-import { Map, View, Feature } from "ol";
+import { Map, View, Feature } from 'ol';
 // @ts-ignore
-import { getCenter } from "ol/extent";
+import { getCenter } from 'ol/extent';
 // @ts-ignore
-import Projection from "ol/proj/Projection";
+import Projection from 'ol/proj/Projection';
 // @ts-ignore
-import ImageLayer from "ol/layer/Image";
+import ImageLayer from 'ol/layer/Image';
 // @ts-ignore
-import Static from "ol/source/ImageStatic";
+import Static from 'ol/source/ImageStatic';
 // @ts-ignore
-import { Vector as VectorSource } from "ol/source";
+import { Vector as VectorSource } from 'ol/source';
 // @ts-ignore
-import { Vector as VectorLayer } from "ol/layer";
+import { Vector as VectorLayer } from 'ol/layer';
 // @ts-ignore
-import { DragBox, Draw } from "ol/interaction";
+import { DragBox } from 'ol/interaction';
 
 // @ts-ignore
-import Polygon from "ol/geom/Polygon";
+import Polygon from 'ol/geom/Polygon';
 
-import "./MapView.scss";
-import { drawOcr } from "../../utils/ocrHelper";
-import OcrJson from "../../assets/pdf/hector_1.ocr.json";
-import { normalStyle, rectangleStyle, highlightStyle } from "../Styles";
+import './MapView.scss';
+import { drawOcr } from '../../utils/ocrHelper';
+import OcrJson from '../../assets/pdf/hector_1.ocr.json';
+import { normalStyle, rectangleStyle, highlightStyle } from '../Styles';
 
 export default class MapView extends React.Component<any, any> {
   private selected: any = [];
@@ -42,10 +42,10 @@ export default class MapView extends React.Component<any, any> {
       condition: false,
     });
 
-    this.dragBox.on("boxend", this.selectOcrFeatures);
+    this.dragBox.on('boxend', this.selectOcrFeatures);
 
     this.state = {
-      previewText: "",
+      previewText: '',
     };
   }
 
@@ -62,8 +62,8 @@ export default class MapView extends React.Component<any, any> {
 
   createContentProjection() {
     return new Projection({
-      code: "xkcd-image",
-      units: "pixel",
+      code: 'xkcd-image',
+      units: 'pixel',
       extent: this.props.extent,
     });
   }
@@ -99,7 +99,7 @@ export default class MapView extends React.Component<any, any> {
       }),
     });
 
-    const img = document.createElement("img");
+    const img = document.createElement('img');
     img.src = url;
 
     img.onload = () => {
@@ -127,10 +127,10 @@ export default class MapView extends React.Component<any, any> {
           style: rectangleStyle,
         }),
       ],
-      target: "js-map",
+      target: 'js-map',
     });
 
-    this.map.on("pointerdown", this.handlePointerDown);
+    this.map.on('pointerdown', this.handlePointerDown);
     this.map.addInteraction(this.dragBox);
   }
 
@@ -159,14 +159,14 @@ export default class MapView extends React.Component<any, any> {
     this.selected.push(feature);
   }
 
-  clearSelected(): void {
-    this.setState({ ...this.state, previewText: "" });
+  clearSelected = () => {
+    this.setState({ ...this.state, previewText: '' });
     this.drawSource.clear();
     this.selected.forEach((feature: any) => {
       feature.setStyle(undefined);
     });
     this.selected = [];
-  }
+  };
 
   // a DragBox interaction used to select features by drawing boxes
 
@@ -220,8 +220,8 @@ export default class MapView extends React.Component<any, any> {
     });
 
     rectangle.setProperties({
-      id: "iD" + Math.random(),
-      text: "VALUE",
+      id: 'iD' + Math.random(),
+      text: 'VALUE',
     });
     rectangle.setId(Math.random());
 
@@ -229,9 +229,9 @@ export default class MapView extends React.Component<any, any> {
     this.drawSource.addFeature(rectangle);
 
     const textSelected = this.selected
-      .sort((a: any, b: any) => (a.get("order") > b.get("order") ? 1 : -1))
-      .map((feature: Feature) => feature.get("text"))
-      .join(" ");
+      .sort((a: any, b: any) => (a.get('order') > b.get('order') ? 1 : -1))
+      .map((feature: Feature) => feature.get('text'))
+      .join(' ');
 
     this.setState({ ...this.state, previewText: textSelected });
   }
@@ -257,13 +257,11 @@ export default class MapView extends React.Component<any, any> {
         <div className="content-box">
           <button onClick={this.clearSelected}>Clean Selected</button>
 
-          <div className={`preview ${this.state.previewText ? "in" : "out"}`}>
+          <div className={`preview ${this.state.previewText ? 'in' : 'out'}`}>
             <p>{this.state.previewText}</p>
           </div>
         </div>
       </>
     );
   }
-
-  // +++++++++++++++++++++++++++++++++++
 }
