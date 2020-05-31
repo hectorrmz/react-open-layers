@@ -1,7 +1,7 @@
 // @ts-ignore
-import Polygon from "ol/geom/Polygon";
+import Polygon from 'ol/geom/Polygon';
 // @ts-ignore
-import { Feature } from "ol";
+import { Feature } from 'ol';
 
 export const drawOcr = (ocrReadResults: any, extent: number[]) => {
   const textFeatures: any[] = [];
@@ -37,8 +37,8 @@ const createBoundingBoxVectorFeature = (
   ocrExtent: number[],
   order: number
 ) => {
-  const coordinates = [];
-  const polygonPoints = [];
+  const coordinates: any = [];
+  const polygonPoints: any = [];
   const imageWidth = imageExtent[2] - imageExtent[0];
   const imageHeight = imageExtent[3] - imageExtent[1];
   const ocrWidth = ocrExtent[2] - ocrExtent[0];

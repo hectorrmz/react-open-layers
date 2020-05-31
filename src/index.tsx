@@ -2,7 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 // @ts-ignore
 import { Provider } from 'react-redux';
+import './custom.scss';
+import '@progress/kendo-theme-default/dist/all.css';
 import './index.css';
+
 import 'ol/ol.css';
 import App from './App';
 import * as serviceWorker from './serviceWorker';

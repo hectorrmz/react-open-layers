@@ -1,17 +1,16 @@
-import React, { useEffect, useState } from "react";
-import MapView from "./MapView";
+import React, { useEffect, useState } from 'react';
+import MapView from './MapView';
 
-import OcrJson from "../../assets/pdf/test.pdf.ocr.json";
+import Kendo from '../kendo/KendoTest';
 
-import { loadPdfFile, loadPdfCanvasPreview } from "../../utils/PdfHelper";
-import { drawOcr } from "../../utils/ocrHelper";
+import { loadPdfFile, loadPdfCanvasPreview } from '../../utils/PdfHelper';
 
 export default function Canvas() {
   const [pdfInfo, setPdfInfo] = useState({
     currentPage: 1,
   } as any);
 
-  const [imageUri, setImageUri] = useState("");
+  const [imageUri, setImageUri] = useState('');
   const [extent, setExtent] = useState([] as any);
 
   useEffect(() => {
@@ -26,7 +25,7 @@ export default function Canvas() {
 
   async function loadImageMap() {
     const pdf = await loadPdfFile(
-      "http://localhost:3002/test?name=hector_1.pdf"
+      'http://localhost:3002/test?name=hector_1.pdf'
     );
 
     setPdfInfo((prev: any) => ({ ...prev, pdf }));
@@ -36,7 +35,7 @@ export default function Canvas() {
   async function loadPdfImage(pdf: any, currentPage: number) {
     const canvas = await loadPdfCanvasPreview(pdf, currentPage);
 
-    const uri = canvas.toDataURL("image/jpeg", 0.7);
+    const uri = canvas.toDataURL('image/jpeg', 0.7);
     setExtent([0, 0, canvas.width, canvas.height]);
     setImageUri(uri);
 
@@ -79,6 +78,8 @@ export default function Canvas() {
           Next
         </button>
       )}
+
+      <Kendo />
     </div>
   );
 }
