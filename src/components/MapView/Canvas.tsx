@@ -60,7 +60,6 @@ export default function Canvas() {
 
   return (
     <div className="canvas-content">
-      <div>{imageUri}</div>
       {imageUri && (
         <MapView
           imageUri={imageUri}

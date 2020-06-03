@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 // @ts-ignore
 import { Map, View, Feature } from 'ol';
 // @ts-ignore
@@ -15,14 +15,19 @@ import { Vector as VectorSource } from 'ol/source';
 import { Vector as VectorLayer } from 'ol/layer';
 // @ts-ignore
 import { DragBox } from 'ol/interaction';
-
+import { platformModifierKeyOnly } from 'ol/events/condition';
 // @ts-ignore
 import Polygon from 'ol/geom/Polygon';
 
 import './MapView.scss';
 import { drawOcr } from '../../utils/ocrHelper';
 import OcrJson from '../../assets/pdf/hector_1.ocr.json';
-import { normalStyle, rectangleStyle, highlightStyle } from '../Styles';
+import {
+  normalStyle,
+  rectangleStyle,
+  highlightStyle,
+  polygonStyleFunction,
+} from '../Styles';
 
 export default class MapView extends React.Component<any, any> {
   private selected: any = [];
@@ -31,6 +36,7 @@ export default class MapView extends React.Component<any, any> {
   private source: VectorSource;
   private drawSource: VectorSource;
   private dragBox: DragBox;
+  private toggled = true;
 
   constructor(props: any) {
     super(props);
@@ -39,7 +45,7 @@ export default class MapView extends React.Component<any, any> {
     this.drawSource = new VectorSource();
 
     this.dragBox = new DragBox({
-      condition: false,
+      condition: this.toggleCtrl,
     });
 
     this.dragBox.on('boxend', this.selectOcrFeatures);
@@ -124,7 +130,7 @@ export default class MapView extends React.Component<any, any> {
         }),
         new VectorLayer({
           source: this.drawSource,
-          style: rectangleStyle,
+          style: polygonStyleFunction(),
         }),
       ],
       target: 'js-map',
@@ -150,7 +156,7 @@ export default class MapView extends React.Component<any, any> {
         this.drawRectangleSelection(this.selected);
       });
     } else {
-      this.clearSelected();
+      this.toggled && this.clearSelected();
     }
   };
 
@@ -209,9 +215,10 @@ export default class MapView extends React.Component<any, any> {
 
     rectangleCoordinates = [
       [x1, y2],
-      [x1, y1],
-      [x2, y1],
       [x2, y2],
+      [x2, y1],
+      [x1, y1],
+
       [x1, y2],
     ];
 
@@ -250,12 +257,19 @@ export default class MapView extends React.Component<any, any> {
     this.drawRectangleSelection(features);
   };
 
+  toggleCtrl = () => this.toggled;
+
+  toggle = () => {
+    this.toggled = !this.toggled;
+  };
+
   public render() {
     return (
       <>
         <div id="js-map"></div>
         <div className="content-box">
           <button onClick={this.clearSelected}>Clean Selected</button>
+          <button onClick={this.toggle}>Toggle</button>
 
           <div className={`preview ${this.state.previewText ? 'in' : 'out'}`}>
             <p>{this.state.previewText}</p>
